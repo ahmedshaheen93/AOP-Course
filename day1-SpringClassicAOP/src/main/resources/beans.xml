@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="calc" class="com.shaheen.service.CalculatorImpl"/>
+    <bean id="beforeAspect" class="com.shaheen.aspect.BeforeAspect"/>
+    <bean id="afterAspect" class="com.shaheen.aspect.AfterAspect"/>
+    <bean id="throwAspect" class="com.shaheen.aspect.ThrowAspect"/>
+
+    <bean id="calculatorProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <list>
+                <value>com.shaheen.service.Calculator</value>
+            </list>
+        </property>
+        <property name="target" ref="calc"/>
+        <property name="interceptorNames">
+            <list>
+                <value>beforeAspect</value>
+                <value>afterAspect</value>
+                <value>throwAspect</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="methodsPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedNames">
+            <list>
+                <value>add</value>
+                <value>sub</value>
+                <value>div</value>
+                <value>mul</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="beforeAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="methodsPointCut"/>
+        <property name="advice" ref="beforeAspect"/>
+    </bean>
+    <bean id="afteAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="methodsPointCut"/>
+        <property name="advice" ref="afterAspect"/>
+    </bean>
+    <bean id="throwAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="methodsPointCut"/>
+        <property name="advice" ref="throwAspect"/>
+    </bean>
+    <bean id="calculatorProxy2" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <list>
+                <value>com.shaheen.service.Calculator</value>
+            </list>
+        </property>
+        <property name="target" ref="calc"/>
+        <property name="interceptorNames">
+            <list>
+                <value>beforeAspect</value>
+                <value>afterAspect</value>
+                <value>throwAspect</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="calc2" class="com.shaheen.service.CalculatorImpl"/>
+    <bean id="calc3" class="com.shaheen.service.CalculatorImpl"/>
+    <bean name="calculatorProxy3" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>calc*</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>beforeAspect</value>
+                <value>afterAspect</value>
+                <value>throwAspect</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>
