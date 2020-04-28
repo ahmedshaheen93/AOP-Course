@@ -10,6 +10,7 @@
     <modules>
         <module>day1-jdkProxy</module>
         <module>day1-SpringClassicAOP</module>
+        <module>day2-AnnotaionAOP</module>
     </modules>
     <packaging>pom</packaging>
 
